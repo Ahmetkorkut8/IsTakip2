@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBIstakipModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BIRIMLER">
+    <Key>
+      <PropertyRef Name="BIRIMID" />
+    </Key>
+    <Property Name="BIRIMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BIRIMAD" Type="nchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="DURUMLAR">
+    <Key>
+      <PropertyRef Name="DURUMID" />
+    </Key>
+    <Property Name="DURUMID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DURUMAD" Type="nchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="ISLER">
+    <Key>
+      <PropertyRef Name="ISID" />
+    </Key>
+    <Property Name="ISID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ISBASLIK" Type="nchar" MaxLength="500" />
+    <Property Name="ISACIKLAMA" Type="nvarchar(max)" />
+    <Property Name="ISPERSONELID" Type="int" />
+    <Property Name="ILETILENTARIH" Type="datetime" />
+    <Property Name="YAPILANTARIH" Type="datetime" />
+    <Property Name="ISDURUMID" Type="int" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="T_PERSONEL">
+    <Key>
+      <PropertyRef Name="PERSONELID" />
+    </Key>
+    <Property Name="PERSONELID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PERSONELADSOYAD" Type="nchar" MaxLength="100" />
+    <Property Name="PERSONELKULLANICIAD" Type="nchar" MaxLength="50" />
+    <Property Name="PERSONELPAROLA" Type="nchar" MaxLength="50" />
+    <Property Name="PERSONELBIRIMID" Type="int" />
+    <Property Name="PERSONELYETKIID" Type="int" />
+  </EntityType>
+  <EntityType Name="YETKI_TURLERI">
+    <Key>
+      <PropertyRef Name="YETKITURID" />
+    </Key>
+    <Property Name="YETKITURID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="YETKITURAD" Type="nchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_ISLER_DURUMLAR">
+    <End Role="DURUMLAR" Type="Self.DURUMLAR" Multiplicity="0..1" />
+    <End Role="ISLER" Type="Self.ISLER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DURUMLAR">
+        <PropertyRef Name="DURUMID" />
+      </Principal>
+      <Dependent Role="ISLER">
+        <PropertyRef Name="ISDURUMID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ISLER_T_PERSONEL">
+    <End Role="T_PERSONEL" Type="Self.T_PERSONEL" Multiplicity="0..1" />
+    <End Role="ISLER" Type="Self.ISLER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_PERSONEL">
+        <PropertyRef Name="PERSONELID" />
+      </Principal>
+      <Dependent Role="ISLER">
+        <PropertyRef Name="ISPERSONELID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_T_PERSONEL_BIRIMLER">
+    <End Role="BIRIMLER" Type="Self.BIRIMLER" Multiplicity="0..1" />
+    <End Role="T_PERSONEL" Type="Self.T_PERSONEL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BIRIMLER">
+        <PropertyRef Name="BIRIMID" />
+      </Principal>
+      <Dependent Role="T_PERSONEL">
+        <PropertyRef Name="PERSONELBIRIMID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_T_PERSONEL_YETKI_TURLERI">
+    <End Role="YETKI_TURLERI" Type="Self.YETKI_TURLERI" Multiplicity="0..1" />
+    <End Role="T_PERSONEL" Type="Self.T_PERSONEL" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="YETKI_TURLERI">
+        <PropertyRef Name="YETKITURID" />
+      </Principal>
+      <Dependent Role="T_PERSONEL">
+        <PropertyRef Name="PERSONELYETKIID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DBIstakipModelStoreContainer">
+    <EntitySet Name="BIRIMLER" EntityType="Self.BIRIMLER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DURUMLAR" EntityType="Self.DURUMLAR" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ISLER" EntityType="Self.ISLER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="T_PERSONEL" EntityType="Self.T_PERSONEL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="YETKI_TURLERI" EntityType="Self.YETKI_TURLERI" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ISLER_DURUMLAR" Association="Self.FK_ISLER_DURUMLAR">
+      <End Role="DURUMLAR" EntitySet="DURUMLAR" />
+      <End Role="ISLER" EntitySet="ISLER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ISLER_T_PERSONEL" Association="Self.FK_ISLER_T_PERSONEL">
+      <End Role="T_PERSONEL" EntitySet="T_PERSONEL" />
+      <End Role="ISLER" EntitySet="ISLER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_T_PERSONEL_BIRIMLER" Association="Self.FK_T_PERSONEL_BIRIMLER">
+      <End Role="BIRIMLER" EntitySet="BIRIMLER" />
+      <End Role="T_PERSONEL" EntitySet="T_PERSONEL" />
+    </AssociationSet>
+    <AssociationSet Name="FK_T_PERSONEL_YETKI_TURLERI" Association="Self.FK_T_PERSONEL_YETKI_TURLERI">
+      <End Role="YETKI_TURLERI" EntitySet="YETKI_TURLERI" />
+      <End Role="T_PERSONEL" EntitySet="T_PERSONEL" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
